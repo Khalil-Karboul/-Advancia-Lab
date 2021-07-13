@@ -1,0 +1,131 @@
+{% extends "/components/base3.html" %} {% set active_page = "ticket list" %} {% block content %}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card strpied-tabled-with-hover">
+                    <div class="card-header ">
+                        <h4 class="card-title">List of Tickets</h4>
+                        <p class="card-category">Welcome {{current_user.firstname}}, this is your ticket list</p>
+
+                    </div>
+                    {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
+                    <div class="alert alert-success alert-dismissable" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                            <span aria-hidden="true">&times;</span>
+                        </button> {{ message }}
+                    </div>
+                    {% endfor %} {% endif %} {% endwith %}
+                    <div class="card-body ">
+                        <table id="TableBst" class="table table-responsive table-hover">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <center>TICKET ID</center>
+                                    </th>
+                                    <th>
+                                        <center>Category</center>
+                                    </th>
+                                    <th>
+                                        <center>Subject</center>
+                                    </th>
+                                    <th>
+                                        <center>Status</center>
+                                    </th>
+                                    <th>
+                                        <center>Trainer</center>
+                                    </th>
+
+                                    <th>
+                                        <center></center>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in data %}
+                                <tr>
+                                    <td>
+                                        <center>{{row.Ticket.id}}</center>
+                                    </td>
+                                    <td>
+                                        <center>{{row.Ticket.category}}</center>
+                                    </td>
+                                    <td>
+                                        <center>{{row.Ticket.subject}}</center>
+                                    </td>
+                                    <td>
+                                        <center>{{row.Ticket.status}}</center>
+                                    </td>
+                                    <td>
+                                        <center>{{row.User.firstname}}&nbsp;{{row.User.lastname}}</center>
+                                    </td>
+
+                                    <td>
+                                        <a role="button" aria-pressed="true" href='/admin/reply_ticket{{row.Ticket.id}}'>
+                                            <button type="submit" class="btn btn-primary "><i class="fa fa-info"></i>More</button>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+{% for row in data %}
+
+<div class="modal fade" id="info{{row.Ticket.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+
+            <form action="/admin/all_tickets/done<id>" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ticket N°{{row.Ticket.id}} by {{row.User}}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label> Category:</label>
+                        <input class='form-control' value='{{row.Ticket.category}}' readonly>
+                    </div>
+                    <div class="form-group">
+                        <label> Subject:</label>
+                        <input class='form-control' value='{{row.Ticket.subject}}' readonly>
+                    </div>
+                    <div class="form-group">
+                        <label> Description: </label>
+                        <input class='form-control' value='{{row.Ticket.description}}' readonly>
+                    </div>
+                    <div class="form-group">
+                        <label> Reply:</label>
+                        <textarea class="form-control" id="reply"></textarea>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1">
+                        <label class="form-check-label" for="exampleRadios1">
+                          Resolved
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit">Done</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+{% endfor %} {% endblock %}

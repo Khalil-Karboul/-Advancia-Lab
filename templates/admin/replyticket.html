@@ -1,0 +1,75 @@
+{% extends "/components/base3.html" %} {% set active_page = "ticket list" %} {% block content %}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12 row justify-content-md-center rounded-circle">
+                <div class="card text-center strpied-tabled-with-hover " style="width: 35rem;">
+                    <div class="card-header ">
+                        <h4 class="card-title">Ticket Subject: {{ticket.subject}}</h4>
+                        <p class="card-category">Category: {{ticket.category}}</p>
+                        <p class="card-category text-right"><a href="/admin/all_tickets">See All Tickets</a></p>
+                        <p class="card-category text-right">{{ticket.datetime}}</p>
+                        {% if ticket.status == 'In Progress': %}
+                        <div class="col-md-8 text-left">
+                            <form action="/admin/close_ticket{{ticket.id}}" method="POST">
+                                <button class="btn btn-danger">Close Ticket</button>
+                            </form>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class=" card-body ">
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+    {% if ticket.status == 'In Progress': %}
+    <form action="/admin/{{ticket.id}}reply_ticket" method="POST">
+        <div class="col-md-12 row justify-content-md-center rounded-circle ">
+
+            <div class="card text-center " style="width: 25rem; ">
+                <input class='form-control' placeholder="+ Add a Reply" name='reply'>
+            </div>
+            <div>
+
+                <button type="submit" class="btn btn-primary "><i class="fa fa-hand-o-left " aria-hidden="true "></i></button>
+            </div>
+
+        </div>
+    </form>
+    {% for row in data %}
+    <div class="col-md-12 row justify-content-md-center rounded-circle ">
+        <div class="card text-center border border-primary " style="width: 29rem; ">
+            <div class="card-body justify-content-md-center ">
+                <h5 class="card-title "></h5>
+                <p class="card-text "><i class="fa fa-user-circle" aria-hidden="true"></i>{{row.msg}}&nbsp;<i class="fa fa-clock-o " aria-hidden="true "></i></p>
+                <p class="card-category text-right ">{{row.datetime}}</p>
+
+            </div>
+        </div>
+    </div>
+    {% endfor %} {% else: %} {% for row in data %}
+    <div class="col-md-12 row justify-content-md-center rounded-circle ">
+        <div class="card text-center border border-primary " style="width: 29rem; ">
+            <div class="card-body justify-content-md-center ">
+                <h5 class="card-title "></h5>
+                <p class="card-text ">{{row.msg}}&nbsp;<i class="fa fa-fa-comment-o" aria-hidden="true "></i></p>
+                <p class="card-category text-right ">{{row.datetime}}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %} {% endif %}
+    <div class="col-md-12 row justify-content-md-center rounded-circle ">
+        <div class="card text-center border border-primary " style="width: 29rem; ">
+            <div class="card-body justify-content-md-center ">
+                <h5 class="card-title "></h5>
+                <p class="card-text ">Request:&nbsp;{{ticket.description}}&nbsp;<i class="fa fa-fa-comment-o" aria-hidden="true "></i></p>
+                <p class="card-category text-right ">{{ticket.datetime}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

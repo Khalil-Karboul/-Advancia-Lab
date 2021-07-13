@@ -1,0 +1,349 @@
+{% extends "/components/base3.html" %} {% set active_page = "training session list" %} {% block content %}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card strpied-tabled-with-hover">
+                    <div class="card-header ">
+                        <h4 class="card-title">List of Training Sessions</h4>
+                        <button data-toggle="modal" data-target="#Add" class="btn btn-info btn-fill pull-right">Add Training Session</button> {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
+                        <div class="alert alert-success alert-dismissable" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                                <span aria-hidden="true">&times;</span>
+                            </button> {{ message }}
+                        </div>
+                        {% endfor %} {% endif %} {% endwith %}
+                        <p class="card-category">Training Session management</p>
+
+                    </div>
+
+                    <table id="TableBst" class="table table-responsive table-hover" style="width:100%">
+                        <thead>
+                            <tr>
+
+                                <th>
+                                    <center>Course</center>
+                                </th>
+                                <th>
+                                    <center>Trainer</center>
+                                </th>
+                                <th>
+                                    <center>Start Date</center>
+                                </th>
+                                <th>
+                                    <center>End Date</center>
+                                </th>
+                                <th class="px-3">
+                                    <center>Action</center>
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in data %} {% if row.User.role_id == 2: %}
+                            <tr>
+
+                                <td>
+                                    <center>{{row.Course.name}}</center>
+                                </td>
+                                <td>
+                                    <center>{{row.User.firstname}}&nbsp;{{row.User.lastname}}</center>
+                                </td>
+                                <td>
+                                    <center>{{row.Training.start_date}}</center>
+                                </td>
+                                <td>
+                                    <center>{{row.Training.end_date}}</center>
+                                </td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Action
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                            <a class="dropdown-item" data-toggle="modal" data-target="#Ajouter{{row.Training.id}}"><i class="fa fa-user-plus"
+                                                aria-hidden="true"></i> Add Participant to this Training Session </a>
+                                            <a class="dropdown-item" data-toggle="modal" data-target="#Exclude{{row.Training.id}}"><i class="fa fa-user-times"
+                                                    aria-hidden="true"></i> Exclude Participant from this Training Session </a>
+                                            <a class="dropdown-item" data-toggle="modal" data-target="#Consulter{{row.Training.id}}"><i class="fa fa-eye"></i>
+                                                Consult Training Session</a>
+                                            <a class="dropdown-item" data-toggle="modal" data-target="#Modifier{{row.Training.id}}"><i class="fa fa-cog"></i> Modify
+                                                Training Session</a>
+                                            <a class="dropdown-item" data-toggle="modal" data-target="#Supprimer{{row.Training.id}}"><i class="fa fa-trash"
+                                                    aria-hidden="true"></i> Delete Training Session </a>
+                                            
+                                        </div>
+                                        <!---->
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endif %} {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+{% for row in data %}
+
+<div class="modal " id="Ajouter{{row.Training.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form action="/admin/create_training_session" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Participants to this Training Session</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-check">
+                        <label for="recipient-name" class="col-form-label">List of Participants:</label> {% for p in participants %}
+                        <div class="list-group">
+                            <a href="/admin/{{p.id}}add_participant_training_session{{row.Training.id}}" class="list-group-item list-group-item-action">{{p.firstname}}&nbsp;{{p.lastname}}</a>
+
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+{% endfor %}
+
+{% for row in data %}
+
+<div class="modal " id="Exclude{{row.Training.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form action="/admin/create_training_session" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Exclude Participants from this Training Session</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-check">
+                        <label for="recipient-name" class="col-form-label">List of Participants:</label> {% for p in participants2 %}
+                        {% if p.Participate.training_id == row.Training.id: %}
+                        <div class="list-group">
+                            <a href="/admin/{{p.User.id}}exclude_participant_training_session{{row.Training.id}}" class="list-group-item list-group-item-action">{{p.User.firstname}}&nbsp;{{p.User.lastname}}</a>
+
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+{% endfor %}
+
+{% for row in data %}
+
+<div class="modal modal-fix-top fade" id="Add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+
+            <form action="/admin/create_training_session" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Training Session</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="course-select">Choose a Course:</label>
+                        <select class="form-control" name="course_id" id="course_id">
+                        <option value=""></option>
+                        {% for c in courses %}
+                        <option value="{{c.id}}">{{c.name}}</option>
+                        {% endfor %}
+                    </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="trainer-select">Choose a Trainer:</label>
+                        <select class="form-control" name="trainer_id" id="trainer_id">
+                        <option value=""></option>
+                        {% for t in trainers %}
+                        <option value="{{t.id}}">{{t.firstname}}&nbsp;{{t.lastname}}</option>
+                        {% endfor %}
+                    </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="example-date-input" class="col-form-label">Start date</label>
+
+                        <input type="date" class="form-control" id="start" name="start_date" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="example-date-input" class="col-form-label">End date</label>
+
+                        <input type="date" class="form-control" id="end" name="end_date" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="information">Type Information Here:</label>
+                        <textarea class="form-control" id="information" name="information" rows="5" cols="50"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit">Add </button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+{% endfor %} {% for row in data %}
+<div class="modal modal-fix-top fade" id="Consulter{{row.Training.id}}" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Training session's info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">ID:</label>
+                            <input type="text" class="form-control" value='{{row.Training.id}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Course:</label>
+                            <input type="text" class="form-control" value='{{row.Course.name}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Trainer:</label>
+                            <input type="text" class="form-control" value='{{row.User.firstname}} {{row.User.lastname}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Start date:</label>
+                            <input type="text" class="form-control" value='{{row.Training.start_date}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">End date:</label>
+                            <input type="text" class="form-control" value='{{row.Training.end_date}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Information:</label>
+                            <input type="text" class="form-control" value='{{row.Training.information}}' readonly>
+                        </div>
+                    </form>
+                </form>
+            </div>
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %} {% for row in data %}
+
+
+<div class="modal modal-fix-top fade" id="Modifier{{row.Training.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form action="/admin/update_training_session{{row.Training.id}}" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update Training Session</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="course-select">Choose a Course:</label>
+                        <select name="course_id" id="course_id">
+                        <option value="{{row.Course.id}}">{{row.Course.name}}</option>
+                        {% for c in courses %}
+                        <option value="{{c.id}}">{{c.name}}</option>
+                        {% endfor %}
+                    </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="trainer-select">Choose a Trainer:</label>
+                        <select class="form-control" name="trainer_id" id="trainer_id">
+                        <option value="{{row.User.id}}">{{row.User.firstname}}&nbsp;{{row.User.lastname}}</option>
+                        {% for t in trainers %}
+                        <option value="{{t.id}}">{{t.firstname}}&nbsp;{{t.lastname}}</option>
+                        {% endfor %}
+                    </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="example-date-input" class="col-form-label">Start date</label>
+
+                        <input type="date" class="form-control" id="start" name="start_date" value="{{row.Training.start_date}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="example-date-input" class="col-form-label">End date</label>
+
+                        <input type="date" class="form-control" id="end" name="end_date" value="{{row.Training.end_date}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="information">Type Information Here:</label>
+                        <textarea class="form-control" id="information" name="information" rows="2" cols="50"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit">Update</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endfor %} {% for row in data %}
+
+<div class="modal " id="Supprimer{{row.Training.id}}" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Deleting a user profile</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the training session "{{row.Course.name}}" trained by "{{row.User.firstname}}&nbsp;{{row.User.lastname}}" </p>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <a role="button" aria-pressed="true" href='/admin/delete_training_session/{{row.Training.id}}'>
+                    <button type="submit" class="btn btn-danger">Yes</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endfor %}{% endblock %}

@@ -1,0 +1,164 @@
+{% extends "/components/base2.html" %} {% set active_page = "ticket list" %} {% block content %}
+
+<head>
+    <style type="text/css">
+        .mt-100 {
+            margin-top: 100px
+        }
+        
+        .marginon-top {
+            margin-top: -3px
+        }
+        
+        .ticket-button {
+            background-color: #ff7043;
+            color: #fff
+        }
+        
+        .ticket-button:hover {
+            background-color: #ff7043;
+            color: #fff
+        }
+    </style>
+</head>
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card strpied-tabled-with-hover">
+                    <div class="card-header ">
+                        <h4 class="card-title">List of Tickets</h4>
+                        <p class="card-category">Welcome {{current_user.firstname}}, this is your ticket list</p>
+
+                    </div>
+                    {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
+                    <div class="alert alert-success alert-dismissable" role="alert">
+                        <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                            <span aria-hidden="true">&times;</span>
+                        </button> {{ message }}
+                    </div>
+                    {% endfor %} {% endif %} {% endwith %}
+                    <div class="card-body ">
+                        <table id="TableBst" class="table table-responsive table-hover">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <center>ID</center>
+                                    </th>
+                                    <th>
+                                        <center>Category</center>
+                                    </th>
+                                    <th>
+                                        <center>Subject</center>
+                                    </th>
+                                    <th>
+                                        <center>Status</center>
+                                    </th>
+                                    <th>
+                                        <center>Time</center>
+                                    </th>
+                                    <th>
+                                        <center>Ticket Tracking</center>
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in data %}
+                                <tr>
+                                    <td>
+                                        <center>{{row.id}}</center>
+                                    </td>
+                                    <td>
+                                        <center>{{row.category}}</center>
+                                    </td>
+                                    <td>
+                                        <center>{{row.subject}}</center>
+                                    </td>
+
+                                    <td>
+                                        <center>{{row.status}}</center>
+                                    </td>
+                                    <td>
+                                        <center>{{row.datetime}}</center>
+                                    </td>
+                                    <td>
+                                        <a role="button" aria-pressed="true" href='/trainer/ticket_history{{row.id}}'>
+                                            <button type="submit" class="btn btn-danger "><i class="fa fa-info"></i>More</button>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <div class="container-fluid d-flex justify-content-center mt-100">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-body">
+                            <div class="media align-items-center align-items-md-start flex-column flex-md-row">
+                                <a href="#" class="text-teal mr-md-3 align-self-md-center marginon-top" data-abc="true"> <i class="fa fa-question-circle-o fa-2x"></i> </a>
+                                <div class="media-body text-center text-md-left">
+                                    <h6 class="media-title font-weight-semibold">Do you have a problem?</h6> Click here to submit a ticket.
+                                </div> <a href="/trainer/add_ticket" class="btn align-self-md-center ml-md-3 mt-md-0 ticket-button" data-abc="true"><i class="fa fa-envelope-o mr-2"></i> Submit a ticket</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+<!-- Modal -->
+{% for row in data %}
+<div class="modal" id="popup{{row.id}}" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ticket's info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="post">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Firstname:</label>
+                            <input type="text" class="form-control" value='{{row.firstname}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Lastname:</label>
+                            <input type="text" class="form-control" value='{{row.lastname}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Email:</label>
+                            <input type="text" class="form-control" value='{{row.email}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Phone Number:</label>
+                            <input type="text" class="form-control" value='{{row.tel}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Password:</label>
+                            <input type="text" class="form-control" value='{{row.password}}' readonly>
+                        </div>
+                    </form>
+                </form>
+            </div>
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %} {% endblock %}

@@ -1,0 +1,54 @@
+{% extends "/components/base3.html" %} {% set active_page = "home" %} {% block content %}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card strpied-tabled-with-hover">
+                    <div class="card-header ">
+                        <h4 class="card-title">List of Training Sessions</h4>
+
+                        <p class="card-category">Training Sessions Groups</p>
+
+                    </div>
+
+                    <div class="container">
+                        <hr>
+                        {% for row in data %}
+                        <div class="row">
+                            <div class="col">
+                                 
+Trainer: <p class="font-weight-bold">{{row.User.firstname}}&nbsp;{{row.User.lastname}}</p>
+Training session name: <p class="font-weight-bold">{{row.Course.name}}</p>
+Start date: <p class="font-weight-bold">{{row.Training.start_date}}</p>
+End date: <p class="font-weight-bold " >{{row.Training.end_date}}</p>
+
+
+                            </div>
+                            <div class="col">
+                              {% for p in participants %}
+                                {% if p.Participate.training_id == row.Training.id: %}
+                                
+                               <p class="font-italic">{{p.User.firstname}}&nbsp;{{p.User.lastname}}</p>
+                                       
+                                      {% endif %}                     
+{% endfor %}
+                              
+                                  
+                            </div>
+                        </div>
+                        <hr>
+{% endfor %}
+                    </div>
+                    
+                    
+
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+{% endblock %}

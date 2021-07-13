@@ -1,0 +1,73 @@
+{% extends "/components/base2.html" %} {% set active_page = "submit ticket" %} {% block content %}
+
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card ">
+                    <div class="card-header ">
+                        <h4 class="card-title">Submit Your Ticket Here!</h4>
+                        <p class="card-category">Please describe the problem</p>
+                        <div class="card-body ">
+                        </div>
+                        <form id="my_form" action="{{url_for('insert')}}" method="POST">
+
+                            <div class="form-group">
+                                <label for="labes">Select Ticket's Type</label>
+                                <select class="form-control" id="category" name="category" required>
+                                    <option value="">--Please choose an option--</option>
+                                    <option value="Account Management">Account Management</option>
+                                    <option value="Technical Support">Technical Support</option>
+                                    <option value="Suggestion">Suggestion</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <input type="text" class="form-control" id="subject" placeholder="Enter the subject" name="subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <textarea class="form-control" id="description" placeholder="Write here the problem you had" name="description" required></textarea>
+                            </div>
+                            <div class="card-body ">
+                            </div>
+                            <div class="container">
+                                <center>
+                                    <button type="reset" class="btn btn-secondary">Reset</button>
+                                    <button type="submit" class="btn btn-primary">Submit the ticket</button>
+                                </center>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-body ">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+<!--
+    <head>
+    <style type="text/css">
+        .form-check-input {
+            margin-left: 0 !important;
+        }
+    </style>
+</head>
+<div class="form-check">
+    <input class="form-check-input" type="radio" name="priority" id="low" checked>
+    <label class="form-check-label" for="low">
+        Low priority
+    </label>
+</div>
+<div class="form-check">
+    <input class="form-check-input" type="radio" name="priority" id="critical">
+    <label class="form-check-label" for="critical">
+        Critical priority
+    </label>
+</div>
+-->

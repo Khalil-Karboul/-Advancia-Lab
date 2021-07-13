@@ -1,0 +1,127 @@
+{% extends 'admin/master.html' %} {% block body %} {{ admin_view.admin.name }} {{current_user.email}} - this is a monitoring page
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card strpied-tabled-with-hover">
+                    <div class="card-header ">
+                        <h4 class="card-title">List of Tickets</h4>
+                        <p class="card-category">Welcome Admin, this is the ticket list</p>
+
+                    </div>
+                    <div class="card-body ">
+                        <table id="TableBst" class="table table-responsive table-hover">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <center>ID</center>
+                                    </th>
+                                    <th>
+                                        <center>Category</center>
+                                    </th>
+                                    <th>
+                                        <center>Subject</center>
+                                    </th>
+                                    <th>
+                                        <center>Description</center>
+                                    </th>
+                                    <th>
+                                        <center>Status</center>
+                                    </th>
+                                    <th>
+                                        <center>Time</center>
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in data %}
+                                <tr>
+                                    <td>
+                                        <center>{{row.id}}</center>
+                                    </td>
+                                    <td>
+                                        <center>{{row.category}}</center>
+                                    </td>
+                                    <td>
+                                        <center>{{row.subject}}</center>
+                                    </td>
+                                    <td>
+                                        <center>{{row.description}}</center>
+                                    </td>
+                                    <td>
+                                        <center>{{row.status}}</center>
+                                    </td>
+                                    <td>
+                                        <center>{{row.datetime}}</center>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+<!-- Modal -->
+{% for row in data %}
+<div class="modal" id="popup{{row.id}}" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Ticket's info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="post">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Firstname:</label>
+                            <input type="text" class="form-control" value='{{row.firstname}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Lastname:</label>
+                            <input type="text" class="form-control" value='{{row.lastname}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Email:</label>
+                            <input type="text" class="form-control" value='{{row.email}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Phone Number:</label>
+                            <input type="text" class="form-control" value='{{row.tel}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Password:</label>
+                            <input type="text" class="form-control" value='{{row.password}}' readonly>
+                        </div>
+                    </form>
+                </form>
+            </div>
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %} {% endblock %} {% block access_control %}
+
+<a class="nav-link" href="/">
+    <span class="no-icon">Tickets</span>
+</a>
+<a class="nav-link" href="/">
+    <span class="no-icon">Log out</span>
+</a> {% endblock %}

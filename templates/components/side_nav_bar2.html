@@ -1,0 +1,31 @@
+{% set navigation_bar = [ ('participant list', 'display', 'Participant List','nc-badge'), ('virtual machine 1', 'vm1t', 'Virtual Machine 1','nc-tv-2'), ('virtual machine 2', 'vm2t', 'Virtual Machine 2','nc-tv-2'), ('ticket list', 'ticket', 'Ticket List','nc-single-copy-04')
+] -%}
+
+
+<div class="sidebar" data-color=purple data-image="">
+    <!--
+Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
+
+Tip 2: you can also add an image using data-image tag
+-->
+    <div class="sidebar-wrapper">
+        <div class="logo">
+            <a href="#" class="simple-text">
+                <img src="../static/img/logo.jpg" width="200" height="50">
+            </a>
+        </div>
+        <ul class="nav">
+
+            {% for id,href,caption,icon in navigation_bar %}
+            <li class="nav-item">
+                <a class="nav-link" {% if id==active_page %} style="opacity: 1;
+                background: rgba(255, 255, 255, 0.23);" {% endif %} href="{{ url_for(href) }} ">
+                    <i class="nc-icon {{ icon }} "></i>
+                    <p>{{ caption|e }} </p>
+                </a>
+            </li>
+            {% endfor %}
+
+        </ul>
+    </div>
+</div>

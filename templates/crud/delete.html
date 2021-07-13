@@ -1,0 +1,27 @@
+<!-- Modal -->
+<div class="modal fade" id="remove-modal" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <form action="{{url_for('delete')}}" method="DELETE"></form>
+            <div class="modal-header">
+                <h4 class="modal-title">Delete User </h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+            </div>
+            <div class="modal-body">
+                <p id="message">
+
+                </p>
+                <input type="hidden" name="id" />
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="submit">Yes</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+            </div>
+            </form>
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,211 @@
+{% extends "/components/base3.html" %} {% set active_page = "course list" %} {% block content %}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card strpied-tabled-with-hover">
+                    <div class="card-header ">
+                        <h4 class="card-title">List of Courses</h4>
+                        <button data-toggle="modal" data-target="#Add" class="btn btn-info btn-fill pull-right">Add Course</button> {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
+                        <div class="alert alert-success alert-dismissable" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                                <span aria-hidden="true">&times;</span>
+                            </button> {{ message }}
+                        </div>
+                        {% endfor %} {% endif %} {% endwith %}
+                        <p class="card-category">Course management</p>
+
+                    </div>
+
+                    <table id="TableBst" class="table table-responsive table-hover" style="width:100%">
+                        <thead>
+                            <tr>
+
+                                <th>
+                                    <center>Name</center>
+                                </th>
+                                <th>
+                                    <center>Description</center>
+                                </th>
+
+                                <th class="px-3">
+                                    <center>Action</center>
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in data %}
+                            <tr>
+
+                                <td>
+                                    <center>{{row.name}}</center>
+                                </td>
+                                <td>
+                                    <center>{{row.description}}</center>
+                                </td>
+
+                                <td>
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Action
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+
+                                            <a class="dropdown-item" data-toggle="modal" data-target="#Modifier{{row.id}}"><i class="fa fa-cog"></i> Modify
+                                                Course</a>
+                                            <a class="dropdown-item" data-toggle="modal" data-target="#Supprimer{{row.id}}"><i class="fa fa-trash"
+                                                    aria-hidden="true"></i> Delete Course </a>
+                                        </div>
+                                        <!---->
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+{% for row in data %}
+
+<div class="modal fade" id="Add" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog  modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form action="/admin/create_course" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Add Course</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label> Name:</label>
+                        <input class='form-control' placeholder="Enter Course Name" name='name'>
+                    </div>
+                    <div class="form-group">
+                        <label> Description:</label>
+                        <input class='form-control' placeholder="Enter Course Description" name='description'>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit">Add </button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+{% endfor %} {% for row in data %}
+<div class="modal" id="Consulter{{row.id}}" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Participant's info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="POST">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">ID:</label>
+                            <input type="text" class="form-control" value='{{row.id}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Firstname:</label>
+                            <input type="text" class="form-control" value='{{row.firstname}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Lastname:</label>
+                            <input type="text" class="form-control" value='{{row.lastname}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Email:</label>
+                            <input type="text" class="form-control" value='{{row.email}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Phone Number:</label>
+                            <input type="text" class="form-control" value='{{row.tel}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Password:</label>
+                            <input type="text" class="form-control" value='{{row.password}}' readonly>
+                        </div>
+                    </form>
+                </form>
+            </div>
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %} {% for row in data %}
+
+
+<div class="modal fade" id="Modifier{{row.id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <form action="/admin/update_course{{row.id}}" method="POST">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update Participant</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label> Name:</label>
+                        <input class='form-control' value="{{row.name}}" name='name'>
+                    </div>
+                    <div class="form-group">
+                        <label> Description:</label>
+                        <input class='form-control' value="{{row.description}}" name='description'>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="submit">Update</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endfor %} {% for row in data %}
+
+<div class="modal fade" id="Supprimer{{row.id}}" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Deleting a Course</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete "{{row.name}}" Courses </p>
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                <a role="button" aria-pressed="true" href='/admin/delete_course/{{row.id}}'>
+                    <button type="submit" class="btn btn-danger">Yes</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endfor %}{% endblock %}

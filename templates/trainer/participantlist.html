@@ -1,0 +1,169 @@
+{% extends "/components/base2.html" %} {% set active_page = "participant list" %} {% block content %}
+
+<head>
+    <style type="text/css">
+        .mt-100 {
+            margin-top: 100px
+        }
+        
+        .marginon-top {
+            margin-top: -3px
+        }
+        
+        .ticket-button {
+            background-color: #ff7043;
+            color: #fff
+        }
+        
+        .ticket-button:hover {
+            background-color: #ff7043;
+            color: #fff
+        }
+    </style>
+</head>
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card strpied-tabled-with-hover">
+                    <div class="card-header ">
+                        <h4 class="card-title">List of registered participants</h4>
+                        <p class="card-category">Welcome {{current_user.firstname}}, this is the list of your participants</p>
+
+                    </div>
+                    <div class="card-body ">
+<div class="container">
+                        <hr>
+                        {% for row in data %}
+                        {% if row.Training.user_id == current_user.id: %}
+                        <div class="row">
+                            <div class="col">    
+                                Training session name: <p class="font-weight-bold">{{row.Course.name}}</p>
+                                Start date: <p class="font-weight-bold">{{row.Training.start_date}}</p>
+                                End date: <p class="font-weight-bold " >{{row.Training.end_date}}</p>                    
+                            </div>
+                            <div class="col">  
+                                <p class="font-weight-bold">Participants:</p>
+                                {% for p in participate %}          
+                                {% if p.Participate.training_id == row.Training.id: %}
+                                
+                                    <p class="font-italic">{{p.User.firstname}}&nbsp;{{p.User.lastname}}</p>
+                                       
+                                {% endif %}      
+                                {% endfor %}               
+                            </div>
+                        </div>
+                        <hr>
+                        {% endif %}  
+{% endfor %}
+                    </div>
+                    </div>
+                                    </div>
+
+            </div>
+            <div class="container-fluid d-flex justify-content-center mt-100">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card card-body">
+                            <div class="media align-items-center align-items-md-start flex-column flex-md-row">
+                                <a href="#" class="text-teal mr-md-3 align-self-md-center marginon-top" data-abc="true"> <i class="fa fa-question-circle-o fa-2x"></i> </a>
+                                <div class="media-body text-center text-md-left">
+                                    <h6 class="media-title font-weight-semibold">Do you have a problem?</h6> Click here to submit a ticket.
+                                </div> <a href="{{url_for('ticket')}}" class="btn align-self-md-center ml-md-3 mt-md-0 ticket-button" data-abc="true"><i class="fa fa-envelope-o mr-2"></i> Submit a ticket</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+
+<!-- Modal -->
+{% for row in data %}
+<div class="modal" id="popup{{row.id}}" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Participant's info</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="post">
+                    <form>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Firstname:</label>
+                            <input type="text" class="form-control" value='{{row.firstname}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Lastname:</label>
+                            <input type="text" class="form-control" value='{{row.lastname}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Email:</label>
+                            <input type="text" class="form-control" value='{{row.email}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Phone Number:</label>
+                            <input type="text" class="form-control" value='{{row.tel}}' readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="message-text" class="col-form-label">Password:</label>
+                            <input type="text" class="form-control" value='{{row.password}}' readonly>
+                        </div>
+                    </form>
+                </form>
+            </div>
+            <div class="col-md-12 text-center">
+                <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
+
+<!---->
+
+
+<script>
+    function update(id,
+        firstname,
+        lastname,
+        email,
+        tel,
+        password,
+        exp_date) {
+
+        $("#update-modal input[name='id ']").val(id);
+        $("#update-modal input[name='firstname ']").val(firstname);
+        $("#update-modal input[name='lastname ']").val(lastname);
+        $("#update-modal input[name='email ']").val(email);
+        $("#update-modal input[name='tel ']").val(tel);
+        $("#update-modal input[name='password ']").val(password);
+        $("#update-modal input[name='exp_date ']").val(exp_date);
+        $("#update-modal").modal();
+
+    }
+
+
+    function remove(id,
+        firstname,
+        lastname) {
+
+        $("#remove-modal input[name='id ']").val(id);
+        $("#remove-modal #message").add(" Are you sure you want to e " + firstname + " " + lastname + " ? ");
+
+        $("#remove-modal").modal();
+        console.log("remove id : " + id)
+    }
+</script>
+
+{% endblock %}

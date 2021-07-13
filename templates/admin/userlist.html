@@ -1,0 +1,85 @@
+{% extends "/components/base3.html" %} {% set active_page = "user list" %} {% block content %}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card strpied-tabled-with-hover">
+                    <div class="card-header ">
+                        <h4 class="card-title">List of registered Users</h4><button data-toggle="modal" data-target="#Add" class="btn btn-info btn-fill pull-right">Add
+                            User</button> {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %} {{ message }} {% endfor %} {% endif %} {% endwith %}
+                        <p class="card-category">User management</p>
+
+                    </div>
+
+                    <table id="TableBst" class="table table-responsive table-hover" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <center>ID</center>
+                                </th>
+                                <th>
+                                    <center>Firstname</center>
+                                </th>
+                                <th>
+                                    <center>Lastname</center>
+                                </th>
+                                <th>
+                                    <center>Email</center>
+                                </th>
+                                <th>
+                                    <center>Phone Number</center>
+                                </th>
+                                <th class="px-3">
+                                    <center>Action</center>
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in data %}
+                            <tr>
+                                <td>
+                                    <center>{{row.id}}</center>
+                                </td>
+                                <td>
+                                    <center>{{row.firstname}}</center>
+                                </td>
+                                <td>
+                                    <center>{{row.lastname}}</center>
+                                </td>
+                                <td>
+                                    <center>{{row.email}}</center>
+                                </td>
+                                <td>
+                                    <center>{{row.tel}}</center>
+                                </td>
+                                <td>
+                                    <div class="dropdown">
+                                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Action
+                                        </button>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                            <a class="dropdown-item" data-toggle="modal" data-target="#Consulter{{row.id}}"><i class="fa fa-envelope"></i>
+                                                Consult User</a>
+                                            <a class="dropdown-item" data-toggle="modal" data-target="#Modifier{{row.id}}"><i class="fa fa-eye"></i> Modify
+                                                User</a>
+                                            <a class="dropdown-item" data-toggle="modal" data-target="#Supprimer{{row.id}}"><i class="fa fa-trash"
+                                                    aria-hidden="true"></i> Delete User </a>
+                                        </div>
+                                        <!---->
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+{% include 'admin/add.html' %} {% include 'admin/delete.html' %} {% include 'admin/update.html' %} {% endblock %}

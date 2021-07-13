@@ -1,0 +1,161 @@
+{% extends "/components/base.html" %} {% set active_page = "virtual machine 1" %} {% block content %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+  <style>
+    #log-container {
+      background-color: rgb(34, 34, 34);
+      padding: 20px;
+      border-radius: 5px;
+      height: 600px;
+      overflow-y: auto;
+    }
+    #log-container pre {
+      background: none;
+      padding: 0;
+      color: white;
+      font-family: Consolas, "Courier New", monospace;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+  </style>
+  <title>Flask Web Console</title>
+</head>
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-11">
+                <div class="card ">
+
+                    <div class="card-body ">
+                        <section id="main">
+    <div class="container">
+      <center><h1 class="title">Web Console</h1></center>
+            
+        <p align='left'>
+           {% with messages = get_flashed_messages() %} {% if messages %} {% for message in messages %}
+                        <div class="alert alert-info alert-dismissable" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="close">
+                                <span aria-hidden="true">&times;</span>
+                            </button> {{ message }}
+                        </div>
+                        {% endfor %} {% endif %} {% endwith %}
+        
+        </p>
+      <hr>
+      <form id="post-form">
+        <div class="columns">
+          <div class="column">
+            <div class="field">
+              <label class="label">Host</label>
+              <div class="control">
+                <input class="input" type="text" name="host" placeholder="<ip>:<port>" required>
+              </div>
+            </div>
+          </div>
+          <div class="column">
+            <div class="field">
+              <label class="label">User</label>
+              <div class="control">
+                <input class="input" type="text" name="username" placeholder="root" required>
+              </div>
+            </div>
+          </div>
+          <div class="column">
+            <div class="field">
+              <label class="label">Password</label>
+              <div class="control">
+                <input class="input" type="password" name="password" placeholder="Password" required>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field has-addons">
+          <div class="control is-expanded">
+            <input class="input" type="text" name="command" placeholder="Type you cmd here" required>
+          </div>
+          <div class="control">
+            <button class="button is-info" id="run-command" >
+              Enter ↵
+            </button>
+          </div>
+        </div>
+      </form>
+      <hr>
+<div class="row" >
+      <div class="col-md-4">
+      <h4 class="title is-6">VM 1's Console</h4> 
+      </div>
+      <div class="col-md-8 col-md-offset-4" ><form action="{{url_for('vmonp')}}" method='POST'>
+                <p align='right'>
+            <button class="button is-success" type="submit"> 
+              <i class="fa fa-play" aria-hidden="true"></i>
+                &nbsp;Start Machine
+            </button></p>
+        </form></div>
+      </div>
+
+      <div id="log-container">
+      </div>
+    </div>
+        <hr>
+
+<div class="row" >
+      <div class="col-md-2">
+     <form action="{{url_for('vmstatep')}}" method='POST'>
+            <p align='right'>
+            <button class="button is-warning" type="submit">
+               <i class="fa fa-circle-o-notch" aria-hidden="true"></i>&nbsp; State
+            </button>
+            </p>
+        </form>
+      </div>
+      <div class="col-md-10 col-md-offset-4" > 
+      <form action="{{url_for('vmoffp')}}" method='POST'>
+            <p align='right'>
+            <button class="button is-danger" type="submit"><i class="fa fa-stop" aria-hidden="true"></i>
+                &nbsp;Terminate
+            </button>
+        
+            </p>
+            </form></div>
+      </div>
+
+
+        <hr>
+       
+  </section>
+    <script>
+    (function () {
+      document.getElementById("post-form").onsubmit = function(e) {
+        e.preventDefault();
+        var parentNode = document.getElementById('log-container');
+        parentNode.innerHTML = "";
+        var data = new FormData(document.getElementById('post-form'));
+        fetch('/run', {
+          method: 'POST',
+          body: data
+        }).then(resp => resp.json()).then(data => {
+          var source = new EventSource('/stream?channel=' + data.uid);
+          source.addEventListener('message', function(event) {
+            var res = JSON.parse(event.data);
+            var pre = document.createElement('pre');
+            pre.innerText = res.message;
+            parentNode.appendChild(pre);
+          });
+        });
+      }
+    })();
+  </script>
+  
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+{% endblock %}
